@@ -1,70 +1,72 @@
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
+import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
 
 const handlePressOutside = () => {
 	Keyboard.dismiss();
 }
-
 export default function Login() {
+	const navigation = useNavigation();
   return (
 	<TouchableWithoutFeedback onPress={handlePressOutside}>
-		<KeyboardAvoidingView
-		behavior={Platform.OS === "ios" ? "padding" : "height"}
-		style={styles.container}
-		>
-			<View style={styles.container}>
+		<View style={{flex:1}}>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				style={styles.container}
+			>
 				<StatusBar style="light"/>
 				<Image style={styles.imageBg} source={require('../../assets/images/background.png')}></Image>
 
 				{/* add lights images */}
 				<View style={styles.lightsContainer}>
-					<Image style={styles.lightImg} source={require('../../assets/images/light.png')}/>
-					<Image style={styles.lightImg2} source={require('../../assets/images/light.png')}/>
+					<Animated.Image entering={FadeInUp.delay(200).duration(1000).springify().damping(5)} style={styles.lightImg} source={require('../../assets/images/light.png')}/>
+					<Animated.Image entering={FadeInUp.delay(400).duration(1000).springify().damping(5)} style={styles.lightImg2} source={require('../../assets/images/light.png')}/>
 				</View>
 
-				{/* Tile and form */}
+				{/* Title and form */}
 				<View style={styles.formContainer}>
 					{/* Title */}
-					<View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 20}}>
-						<Text style={styles.title}>
+					<View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 50}}>
+						<Animated.Text entering={FadeInUp.duration(1000).springify()} style={styles.title}>
 							Login
-						</Text>
+						</Animated.Text>
 					</View>
 					{/* Form */}
 					<View style={styles.form}>
-						<View style={{backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: 20,borderRadius: 20, width: '100%'}}>
-							<TextInput placeholder='Email' placeholderTextColor={'grey'} />
-						</View>
-						<View style={{backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: 20,borderRadius: 20, width: '100%', marginBottom: 8}}>
-							<TextInput placeholder='Password' placeholderTextColor={'grey'} secureTextEntry />
-						</View>
-						<View style={{width: '100%'}}>
+						<Animated.View entering={FadeInDown.duration(1000).springify()} style={{backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: 20,borderRadius: 20, width: '100%'}}>
+							<TextInput placeholder='Email' placeholderTextColor={'grey'} textContentType='oneTimeCode'/>
+						</Animated.View>
+						<Animated.View entering={FadeInDown.delay(200).duration(1000).springify()} style={{backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: 20,borderRadius: 20, width: '100%', marginBottom: 8}}>
+							<TextInput placeholder='Password' placeholderTextColor={'grey'} secureTextEntry={true} />
+						</Animated.View>
+						<Animated.View entering={FadeInDown.delay(400).duration(1000).springify()} style={{width: '100%'}}>
 							<TouchableOpacity style={{width: '100%', backgroundColor: '#39BEF7', padding: 15, borderRadius: 20, marginBottom: 8}}>
 								<Text style={{fontWeight: 'bold', fontSize: 20, color: 'white', textAlign: 'center'}}>
 									Login
 								</Text>
 							</TouchableOpacity>
-						</View>
-						<View style={{flexDirection: 'row', justifyContent: 'center'}}>
+						</Animated.View>
+						<Animated.View entering={FadeInDown.delay(600).duration(1000).springify()} style={{flexDirection: 'row', justifyContent: 'center'}}>
 							<Text>Don't have an account? </Text>
-							<TouchableOpacity>
+							<TouchableOpacity onPress={() => navigation.push('SignUp')}>
 								<Text style={{color: '#0D82BF'}}>SignUp</Text>
 							</TouchableOpacity>
-						</View>
+						</Animated.View>
 					</View>
 				</View>
-			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</View>
 	</TouchableWithoutFeedback>
   )
 }
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: 'white',
-		height: '100%',
-		width: '100%'
 	},
 	imageBg: {
 		height: '100%',
